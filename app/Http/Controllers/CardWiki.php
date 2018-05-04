@@ -3,32 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Repositories\TCGplayer;
+use App\Services\BuildProductDatabase;
+
+use App\Services\Catalog;
 
 class CardWiki extends Controller
 {
-    public function __construct(TCGPlayer $TCGplayerRepo)
+    public function __construct(BuildProductDatabase $builder, Catalog $catalog)
     {
-        $this->TCGplayerRepo = $TCGplayerRepo;
-    }
-
-    public function index()
-    {
-        return view('home.index', ['categories' => ['Magic', 'Force of Will']]);
-    }
-
-    public function showCard()
-    {
-        return view('card.show');
-    }
-
-    public function testForceOfWill()
-    {
-        $this->TCGplayerRepo->forceOfWill();
+        $this->builder = $builder;
+        $this->catalog = $catalog;
     }
 
     public function testDatabase()
     {
-        $this->TCGplayerRepo->buildDatabase();
+        $this->builder->buildDatabase();
+    }
+
+    public function testListAllCategories()
+    {
+        dd($this->catalog->listAllCategories());
     }
 }

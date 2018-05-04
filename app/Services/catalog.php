@@ -8,11 +8,10 @@
  *
  */
 
-
 namespace App\Services;
 
 use GuzzleHttp\Client;
-use TCGplayer;
+use App\Services\TCGplayer;
 
 class Catalog
 {
@@ -27,19 +26,22 @@ class Catalog
 
     /**
      * This function returns a paged list of all categories supported by TCGplayer.
-     * @param integer $limit Max number per page
-     * @param integer $offset Start at this record
-     * @param string $sortOrder Sort by this field
-     * @param string $sortDesc true or false
+     * @param array $queryParams Contains all sort options
      */
-    public function listAllCategories($limit = 100, $offset = 0, $sortOrder = 'name', $sortDesc = 'true')
+    public function listAllCategories($queryParams = null)
     {
+        if ($queryParams == null) {
+            $queryParams = [
+                'limit' => 100,
+                'offset' => 10
+            ];
+        }
         $response = $this->TCGCoreService->guzzle->request(
             'GET',
-            '/catalog/categories?limit=' . $limit . '&offset=' . $offset
-              . '&sortOrder=' . $sortOrder . '&sortDesc=' . $sortDesc,
+            '/catalog/categories',
             [
-                'headers' => $this->TCGCoreService->headers;
+                'headers' => $this->TCGCoreService->headers,
+                'query' => $queryParams
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -58,7 +60,7 @@ class Catalog
             'GET',
             '/catalog/categories/' . $categoryIds,
             [
-                'headers' => $this->TCGCoreService->headers;
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -77,7 +79,7 @@ class Catalog
             'GET',
             '/catalog/categories/' . $categoryId . '/search/manifest',
             [
-                'headers' => $this->TCGCoreService->headers;
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -132,7 +134,7 @@ class Catalog
               . '/groups?limit=100&offset=' . $offset
               . '&limit=' . $limit,
             [
-                'headers' => $this->getHeaders()
+                'headers' => $$this->TCGCoreService->headerss()
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -148,7 +150,7 @@ class Catalog
             'GET',
             '/catalog/categories/' . $categoryId . '/rarities',
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -164,7 +166,7 @@ class Catalog
             'GET',
             '/catalog/categories/' . $categoryId . '/printings',
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -181,7 +183,7 @@ class Catalog
             'GET',
             '/catalog/categories/' . $categoryId . '/conditions',
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -197,7 +199,7 @@ class Catalog
             'GET',
             '/catalog/categories/' . $categoryId . '/languages',
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -214,7 +216,7 @@ class Catalog
             'GET',
             '/catalog/categories/' . $categoryId . '/media',
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -242,7 +244,7 @@ class Catalog
             'GET',
             '/catalog/groups',
             [
-                'headers' => $this->getHeaders(),
+                'headers' => $this->TCGCoreService->headers,
                 'query' => $params
             ]
         );
@@ -261,7 +263,7 @@ class Catalog
             'GET',
             '/catalog/groups/' . $groupIds,
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -278,7 +280,7 @@ class Catalog
             'GET',
             '/catalog/groups/' . $groupId . '/media',
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -308,7 +310,7 @@ class Catalog
             'GET',
             '/catalog/products',
             [
-                'headers' => $this->getHeaders(),
+                'headers' => $this->TCGCoreService->headers,
                 'query' => $params
             ]
         );
@@ -327,7 +329,7 @@ class Catalog
             'GET',
             '/catalog/products/' . $productIds,
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -344,7 +346,7 @@ class Catalog
             'GET',
             '/catalog/products/gtin/' . $gtin,
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -360,7 +362,7 @@ class Catalog
             'GET',
             '/catalog/products/' . $productId . 'productconditions',
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -377,7 +379,7 @@ class Catalog
             'GET',
             '/catalog/products/' . $productId . '/productsalsopurchased',
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -393,7 +395,7 @@ class Catalog
             'GET',
             '/catalog/products/' . $productId . '/media',
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -411,7 +413,7 @@ class Catalog
             'GET',
             '/catalog/skus/' . $skuIds,
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
@@ -427,7 +429,7 @@ class Catalog
             'GET',
             '/catalog/superconditions',
             [
-                'headers' => $this->getHeaders()
+                'headers' => $this->TCGCoreService->headers
             ]
         );
         return json_decode($response->getBody()->getContents(), true);
