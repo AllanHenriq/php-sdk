@@ -15,6 +15,7 @@ class Product extends Model
         'categoryId',
         'groupId',
         'url',
-        'modifiedOn'
+        'modifiedOn',
+        'extendedData'
     ];
 }

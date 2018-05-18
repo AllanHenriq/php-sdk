@@ -58,13 +58,28 @@ class TCGplayer
         if (empty($this->token) || $this->token->expires <= Carbon::now()) {
             // we only ever want one access token
             $token = AccessToken::first();
-
+            if (!empty(env('TCG_STORE_KEY'))) {
+                $headers = [
+                    'Content-Type' => 'application/json',
+                    'X-Tcg-Access-Token' => env('X_TCG_ACCESS_TOKEN')
+                ];
+            } else {
+                $headers = [
+                    'Content-Type' => 'application/json'
+                ];
+            }
             // create our request body
             $requestBody = 'grant_type=client_credentials&client_id=' . $this->publicKey
                 . '&client_secret=' . $this->privateKey;
-            $response = $this->guzzle->request('POST', '/token', ['body' => $requestBody]);
+            $response = $this->guzzle->request(
+                'POST',
+                '/token',
+                [
+                    'body' => $requestBody,
+                    'headers' => $headers
+                ]
+            );
             $response = json_decode($response->getBody()->getContents(), true);
-
             // create new token if we don't have one, update existing if we do
             if (empty($token)) {
                 $token = AccessToken::create([

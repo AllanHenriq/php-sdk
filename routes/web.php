@@ -16,8 +16,5 @@
 });
 */
 Route::get('/', 'CardWiki@index');
-Route::post('card', 'CardWiki@showCard');
-Route::get('/fow', 'CardWiki@testForceOfWill');
-Route::get('/report', 'Report@index');
-
-Route::get('/testDatabase', 'CardWiki@testDatabase');
+Route::get('/generateDatabase', 'CardWiki@testDatabase');
+Route::get('/testCategories', 'CardWiki@testListAllCategories');

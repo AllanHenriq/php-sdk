@@ -21,6 +21,7 @@ class CreateProductsTable extends Migration
             $table->integer('groupId');
             $table->string('url');
             $table->dateTime('modifiedOn');
+            $table->json('extendedData');
             $table->timestamps();
         });
     }
