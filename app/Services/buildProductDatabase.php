@@ -91,9 +91,9 @@ class BuildProductDatabase
      */
     public function saveProducts()
     {
-        $groups = Group::all();
-        foreach ($groups as $group) {
-            $categoryId = $group->categoryId;
+        $categories = Category::all();
+        foreach ($categories as $category) {
+            $categoryId = $category->categoryId;
             $offset = 0;
             $totalItems = 100;
             while ($totalItems > $offset) {
@@ -109,6 +109,7 @@ class BuildProductDatabase
                 $totalItems = $products['totalItems'];
                 $offset += 100;
                 foreach ($products['results'] as $product) {
+                    $product['extendedData'] = json_encode($product['extendedData']);
                     Product::firstOrCreate(
                         ['productId' => $product['productId']],
                         $product
