@@ -94,6 +94,11 @@ class BuildProductDatabase
         $categories = Category::all();
         foreach ($categories as $category) {
             $categoryId = $category->categoryId;
+            // throws error on specific categories, skip these categories
+            if ($categoryId == 21 || $categoryId == 9) {
+                continue;
+            }
+            // make requests to grab data
             $offset = 0;
             $totalItems = 100;
             while ($totalItems > $offset) {
