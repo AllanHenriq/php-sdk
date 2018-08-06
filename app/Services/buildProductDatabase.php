@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Group;
 use App\Models\Product;
 use App\Models\ProductCondition;
+use GuzzleHttp\Exception\ClientException;
 
 class BuildProductDatabase
 {
@@ -102,23 +103,29 @@ class BuildProductDatabase
             $offset = 0;
             $totalItems = 100;
             while ($totalItems > $offset) {
-                $response = $this->TCGCoreService->guzzle->request(
-                    'GET',
-                    '/catalog/products?categoryId=' . $categoryId
-                        . '&offset=' . $offset . '&getExtendedFields=true&limit=100',
-                    [
-                        'headers' => $this->TCGCoreService->headers
-                    ]
-                );
-                $products = json_decode($response->getBody()->getContents(), true);
-                $totalItems = $products['totalItems'];
-                $offset += 100;
-                foreach ($products['results'] as $product) {
-                    $product['extendedData'] = json_encode($product['extendedData']);
-                    Product::firstOrCreate(
-                        ['productId' => $product['productId']],
-                        $product
+                try {
+                    $response = $this->TCGCoreService->guzzle->request(
+                        'GET',
+                        '/catalog/products?categoryId=' . $categoryId
+                            . '&offset=' . $offset . '&getExtendedFields=true&limit=100',
+                        [
+                            'headers' => $this->TCGCoreService->headers
+                        ]
                     );
+                    $products = json_decode($response->getBody()->getContents(), true);
+                    $totalItems = $products['totalItems'];
+                    $offset += 100;
+                    foreach ($products['results'] as $product) {
+                        $product['extendedData'] = json_encode($product['extendedData']);
+                        Product::firstOrCreate(
+                            ['productId' => $product['productId']],
+                            $product
+                        );
+                    }
+                } catch (GuzzleHttp\Exception\ClientException $e) {
+                    $response = $e->getResponse();
+                    $responseBodyAsString = $response->getBody()->getContents();
+                    echo "Error found on category: " . $categoryId . ": " . $responseBodyAsString;
                 }
             }
         }
