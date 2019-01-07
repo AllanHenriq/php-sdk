@@ -7,6 +7,7 @@ Steps to setup locally:
 3) `composer install` in directory to install additional dependencies.
 4) Copy .env.example file in base directory into .env, modify the last 4 values to set your API keys.
 5) Update the DB_DATABASE, DB_USERNAME, and DB_PASSWORD to be the MYSQL database that you want to use with this project.
+6) On a command line, run the following commands starting with `php artisan key:generate`.
 6) `php artisan migrate` to build out a local product database.
 7) `php artisan serve` to run project. This project can be scaffolding, not a lot of routes are defined.
 8) In a browser, go to : `127.0.0.1:8000/generateDatabase` if you want to generate a local product database.
