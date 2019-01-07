@@ -17,7 +17,7 @@ class CreateGroupsTable extends Migration
             $table->integer('groupId');
             $table->string('name');
             $table->string('abbreviation')->nullable();
-            $table->boolean('supplemental');
+            $table->boolean('supplemental')->default(0);
             $table->string('publishedOn');
             $table->dateTime('modifiedOn');
             $table->integer('categoryId');

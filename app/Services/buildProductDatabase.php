@@ -48,10 +48,12 @@ class BuildProductDatabase
         ]);
         $categories = json_decode($response->getBody()->getContents(), true);
         foreach ($categories['results'] as $category) {
-            Category::firstOrCreate(
-                ['categoryId' => $category['categoryId']],
-                $category
-            );
+            if ($category['categoryId'] != 55) {
+                Category::firstOrCreate(
+                    ['categoryId' => $category['categoryId']],
+                    $category
+                );
+            }
         }
     }
 
@@ -92,6 +94,7 @@ class BuildProductDatabase
      */
     public function saveProducts()
     {
+        // change this if you want to grab only specific categories:
         $categories = Category::all();
         foreach ($categories as $category) {
             $categoryId = $category->categoryId;
@@ -117,10 +120,12 @@ class BuildProductDatabase
                     $offset += 100;
                     foreach ($products['results'] as $product) {
                         $product['extendedData'] = json_encode($product['extendedData']);
+                        $product['presaleInfo'] = json_encode($product['presaleInfo']);
                         Product::firstOrCreate(
                             ['productId' => $product['productId']],
                             $product
                         );
+                        dd([Product::first(), $product]);
                     }
                 } catch (GuzzleHttp\Exception\ClientException $e) {
                     $response = $e->getResponse();

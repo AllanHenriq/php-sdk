@@ -10,12 +10,14 @@ class Product extends Model
 
     protected $fillable = [
         'productId',
-        'productName',
-        'image',
+        'name',
+        'cleanName',
+        'imageUrl',
         'categoryId',
         'groupId',
         'url',
         'modifiedOn',
+        'presaleInfo',
         'extendedData'
     ];
 }
