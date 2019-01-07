@@ -125,7 +125,6 @@ class BuildProductDatabase
                             ['productId' => $product['productId']],
                             $product
                         );
-                        dd([Product::first(), $product]);
                     }
                 } catch (GuzzleHttp\Exception\ClientException $e) {
                     $response = $e->getResponse();
